@@ -1,0 +1,16 @@
+.env
+.venv
+.vs/
+.vscode/
+.idea/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Database files
+*.sqlite
+*.json
