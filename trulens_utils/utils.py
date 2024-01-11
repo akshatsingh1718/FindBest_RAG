@@ -9,7 +9,7 @@ class LlamaTrulensEval:
         cls,
         query_engine,
         app_id: str,
-        database_file: str = "",
+        database_file: str = None,
         verbose=False,
         fresh=False,
     ):

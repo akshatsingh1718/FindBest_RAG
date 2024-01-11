@@ -22,13 +22,55 @@ from typing import List
 
 
 class AutoMergingRetrievalPipeline:
-    def build_automerging_index(
-        documents,
+    def __init__(
+        cls,
         llm,
         embed_model="local:BAAI/bge-small-en-v1.5",
-        save_dir="merging_index",
+        persist_dir="merging_index",
         chunk_sizes=None,
+        similarity_top_k=12,
+        rerank_top_n=6,
+        rerank_model="BAAI/bge-reranker-base",
+        verbose=False,
     ):
+        cls.llm = llm
+        cls.embed_model = embed_model
+        cls.persist_dir = persist_dir
+        cls.chunk_sizes = chunk_sizes
+        cls.similarity_top_k = similarity_top_k
+        cls.rerank_top_n = rerank_top_n
+        cls.rerank_model = rerank_model
+        cls.verbose = verbose
+
+    def from_query_engine(cls, documents: List[Document] = None):
+        automerging_index = cls.build_automerging_index(
+            llm=cls.llm,
+            persist_dir=cls.persist_dir,
+            chunk_sizes=cls.chunk_sizes,
+            verbose=cls.verbose,
+            documents=documents,
+        )
+
+        query_engine = cls.get_automerging_query_engine(
+            automerging_index=automerging_index,
+            similarity_top_k=cls.similarity_top_k,
+            rerank_top_n=cls.rerank_top_n,
+            rerank_model=cls.rerank_model,
+            verbose=cls.verbose,
+        )
+
+        return query_engine
+
+    @staticmethod
+    def build_automerging_index(
+        llm,
+        persist_dir: str,
+        documents: List[Document],
+        chunk_sizes: List[int],
+        *args,
+        **kwargs,
+    ):
+        embed_model = kwargs.pop("embed_model", "local:BAAI/bge-small-en-v1.5")
         chunk_sizes = chunk_sizes or [2048, 512, 128]
         node_parser = HierarchicalNodeParser.from_defaults(chunk_sizes=chunk_sizes)
         nodes = node_parser.get_nodes_from_documents(documents)
@@ -40,34 +82,37 @@ class AutoMergingRetrievalPipeline:
         storage_context = StorageContext.from_defaults()
         storage_context.docstore.add_documents(nodes)
 
-        if not os.path.exists(save_dir):
+        if not os.path.exists(persist_dir):
             automerging_index = VectorStoreIndex(
                 leaf_nodes,
                 storage_context=storage_context,
                 service_context=merging_context,
             )
-            automerging_index.storage_context.persist(persist_dir=save_dir)
+            automerging_index.storage_context.persist(persist_dir=persist_dir)
         else:
             automerging_index = load_index_from_storage(
-                StorageContext.from_defaults(persist_dir=save_dir),
+                StorageContext.from_defaults(persist_dir=persist_dir),
                 service_context=merging_context,
             )
         return automerging_index
 
+    @staticmethod
     def get_automerging_query_engine(
         automerging_index,
-        similarity_top_k=12,
-        rerank_top_n=6,
-    ):
+        similarity_top_k: int = 12,
+        rerank_top_n: int = 6,
+        rerank_model="BAAI/bge-reranker-base",
+        verbose=False,
+        *args,
+        **kwargs,
+    ) -> RetrieverQueryEngine:
         base_retriever = automerging_index.as_retriever(
             similarity_top_k=similarity_top_k
         )
         retriever = AutoMergingRetriever(
             base_retriever, automerging_index.storage_context, verbose=True
         )
-        rerank = SentenceTransformerRerank(
-            top_n=rerank_top_n, model="BAAI/bge-reranker-base"
-        )
+        rerank = SentenceTransformerRerank(top_n=rerank_top_n, model=rerank_model)
         auto_merging_engine = RetrieverQueryEngine.from_args(
             retriever, node_postprocessors=[rerank]
         )
@@ -96,54 +141,81 @@ class SentenceWindowRetrievalPipeline:
         cls.rerank_model = rerank_model
 
     def from_query_engine(cls, documents: List[Document] = None):
-        cls.index = cls.build_index(documents)
+        sentence_window_index = cls.get_sentence_window_index(
+            llm=cls.llm,
+            persist_dir=cls.persist_dir,
+            sentence_window_size=cls.sentence_window_size,
+            verbose=cls.verbose,
+            documents=documents,
+        )
 
-        cls.query_engine = cls.build_query_engine()
+        query_engine = cls.get_sentence_window_query_engine(
+            sentence_window_index=sentence_window_index,
+            similarity_top_k=cls.similarity_top_k,
+            rerank_top_n=cls.rerank_top_n,
+            rerank_model=cls.rerank_model,
+            verbose=cls.verbose,
+        )
 
-        return cls.query_engine
+        return query_engine
 
-    def build_index(cls, documents: List[Document] = None, *args, **kwargs):
+    @staticmethod
+    def get_sentence_window_index(
+        llm,
+        persist_dir: str,
+        sentence_window_size=3,
+        verbose: bool = True,
+        documents: List[Document] = None,
+        *args,
+        **kwargs,
+    ):
         window_metadata_key = kwargs.pop("window_metadata_key", "window")
         original_text_metadata_key = kwargs.pop(
             "original_text_metadata_key", "original_text"
         )
+        embed_model = kwargs.pop("embed_model", "local:BAAI/bge-small-en-v1.5")
 
-        cls.node_parser = SentenceWindowNodeParser.from_defaults(
-            window_size=cls.sentence_window_size,
+        node_parser = SentenceWindowNodeParser.from_defaults(
+            window_size=sentence_window_size,
             window_metadata_key=window_metadata_key,
             original_text_metadata_key=original_text_metadata_key,
         )
 
         sentence_context = ServiceContext.from_defaults(
-            llm=cls.llm,
-            embed_model=cls.embed_model,
-            node_parser=cls.node_parser,
+            llm=llm,
+            embed_model=embed_model,
+            node_parser=node_parser,
         )
 
-        if not os.path.exists(cls.persist_dir):
-            if cls.verbose:
-                print(f"Creating sentence index to {cls.persist_dir}")
+        if not os.path.exists(persist_dir):
+            if verbose:
+                print(f"Creating sentence index to {persist_dir}")
 
             sentence_index = VectorStoreIndex.from_documents(
                 documents, service_context=sentence_context
             )
 
-            sentence_index.storage_context.persist(persist_dir=cls.persist_dir)
+            sentence_index.storage_context.persist(persist_dir=persist_dir)
 
         else:
-            if cls.verbose:
-                print(f"Loading sentence index from {cls.persist_dir}")
+            if verbose:
+                print(f"Loading sentence index from {persist_dir}")
 
             sentence_index = load_index_from_storage(
-                StorageContext.from_defaults(persist_dir=cls.persist_dir),
+                StorageContext.from_defaults(persist_dir=persist_dir),
                 service_context=sentence_context,
             )
 
-        cls.sentence_index = sentence_index
         return sentence_index
 
-    def build_query_engine(
-        cls,
+    @staticmethod
+    def get_sentence_window_query_engine(
+        sentence_window_index,
+        similarity_top_k=6,
+        rerank_top_n=2,
+        rerank_model="BAAI/bge-reranker-base",
+        verbose=False,
+        *args,
         **kwargs
         # sentence_index, similarity_top_k=6, rerank_top_n=2
     ) -> RetrieverQueryEngine:
@@ -155,14 +227,11 @@ class SentenceWindowRetrievalPipeline:
         )
 
         # re ranking
-        rerank = SentenceTransformerRerank(
-            top_n=cls.rerank_top_n, model=cls.rerank_model
-        )
+        rerank = SentenceTransformerRerank(top_n=rerank_top_n, model=rerank_model)
 
-        sentence_window_engine = cls.index.as_query_engine(
-            similarity_top_k=cls.similarity_top_k,  # we need more larger context to be fetched and feed to re rank
+        sentence_window_engine = sentence_window_index.as_query_engine(
+            similarity_top_k=similarity_top_k,  # we need more larger context to be fetched and feed to re rank
             node_postprocessors=[postproc, rerank],
         )
 
-        cls.engine = sentence_window_engine
-        return cls.engine
+        return sentence_window_engine
