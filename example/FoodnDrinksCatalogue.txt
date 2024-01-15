@@ -191,13 +191,6 @@ Available Dishes Details:
     Is Vegetarian: Yes
     Dish Course: Main Course
 
-27. Dish name: Lassi
-    Price: 100 Rupees
-    Description: Refreshing yogurt-based drink, sweet or salty.
-    Ingredients: Yogurt, sugar/salt, flavorings (optional).
-    Is Vegetarian: Yes
-    Dish Course: Beverage
-
 28. Dish name: Chicken Korma
     Price: 260 Rupees
     Description: Chicken cooked in a rich and creamy cashew-based gravy.

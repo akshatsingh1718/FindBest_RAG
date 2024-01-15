@@ -19,6 +19,10 @@ from llama_index.retrievers import AutoMergingRetriever
 from llama_index.query_engine import RetrieverQueryEngine
 import os
 from typing import List
+from llama_utils.utils.common import (
+    SENTENCE_WINDOW_INDEX_DEFAULT_DIR,
+    AUTO_MERGING_INDEX_DEFAULT_DIR,
+)
 
 
 class AutoMergingRetrievalPipeline:
@@ -26,7 +30,7 @@ class AutoMergingRetrievalPipeline:
         cls,
         llm,
         embed_model="local:BAAI/bge-small-en-v1.5",
-        persist_dir="merging_index",
+        persist_dir: str = "merging_index",
         chunk_sizes=None,
         similarity_top_k=12,
         rerank_top_n=6,
@@ -42,45 +46,61 @@ class AutoMergingRetrievalPipeline:
         cls.rerank_model = rerank_model
         cls.verbose = verbose
 
-    def from_query_engine(cls, documents: List[Document] = None):
-        automerging_index = cls.build_automerging_index(
-            llm=cls.llm,
-            persist_dir=cls.persist_dir,
-            chunk_sizes=cls.chunk_sizes,
-            verbose=cls.verbose,
+    @staticmethod
+    def from_default_query_engine(
+        llm=OpenAI(model="gpt-3.5-turbo"),
+        embed_model="local:BAAI/bge-small-en-v1.5",
+        chunk_sizes: List[int] = [2048, 512, 128],
+        persist_dir="automerging_index",
+        similarity_top_k: int = 6,
+        rerank_top_n: int = 2,
+        rerank_model="BAAI/bge-reranker-base",
+        documents: List[Document] = None,
+        verbose=False,
+    ):
+        automerging_index = AutoMergingRetrievalPipeline.from_default_index(
+            llm=llm,
+            persist_dir=persist_dir,
+            chunk_sizes=chunk_sizes,
+            verbose=verbose,
             documents=documents,
         )
 
-        query_engine = cls.get_automerging_query_engine(
-            automerging_index=automerging_index,
-            similarity_top_k=cls.similarity_top_k,
-            rerank_top_n=cls.rerank_top_n,
-            rerank_model=cls.rerank_model,
-            verbose=cls.verbose,
+        query_engine = AutoMergingRetrievalPipeline.from_query_engine(
+            index=automerging_index,
+            similarity_top_k=similarity_top_k,
+            rerank_top_n=rerank_top_n,
+            rerank_model=rerank_model,
+            verbose=verbose,
         )
 
         return query_engine
 
     @staticmethod
-    def build_automerging_index(
-        llm,
-        persist_dir: str,
-        documents: List[Document],
-        chunk_sizes: List[int],
+    def from_default_index(
+        llm=None,
+        persist_dir: str = "",
+        documents: List[Document] = None,
+        chunk_sizes: List[int] = [2048, 512, 128],
+        verbose: bool = False,
         *args,
         **kwargs,
     ):
         embed_model = kwargs.pop("embed_model", "local:BAAI/bge-small-en-v1.5")
-        chunk_sizes = chunk_sizes or [2048, 512, 128]
         node_parser = HierarchicalNodeParser.from_defaults(chunk_sizes=chunk_sizes)
         nodes = node_parser.get_nodes_from_documents(documents)
         leaf_nodes = get_leaf_nodes(nodes)
+
+        llm = llm or OpenAI(model="gpt-3.5-turbo")
+
         merging_context = ServiceContext.from_defaults(
             llm=llm,
             embed_model=embed_model,
         )
         storage_context = StorageContext.from_defaults()
         storage_context.docstore.add_documents(nodes)
+
+        persist_dir = persist_dir or AUTO_MERGING_INDEX_DEFAULT_DIR
 
         if not os.path.exists(persist_dir):
             automerging_index = VectorStoreIndex(
@@ -90,15 +110,19 @@ class AutoMergingRetrievalPipeline:
             )
             automerging_index.storage_context.persist(persist_dir=persist_dir)
         else:
+            if verbose:
+                print(f"Loading sentence index from {persist_dir}")
+
             automerging_index = load_index_from_storage(
                 StorageContext.from_defaults(persist_dir=persist_dir),
                 service_context=merging_context,
             )
+
         return automerging_index
 
     @staticmethod
-    def get_automerging_query_engine(
-        automerging_index,
+    def from_query_engine(
+        index: VectorStoreIndex,
         similarity_top_k: int = 12,
         rerank_top_n: int = 6,
         rerank_model="BAAI/bge-reranker-base",
@@ -106,11 +130,9 @@ class AutoMergingRetrievalPipeline:
         *args,
         **kwargs,
     ) -> RetrieverQueryEngine:
-        base_retriever = automerging_index.as_retriever(
-            similarity_top_k=similarity_top_k
-        )
+        base_retriever = index.as_retriever(similarity_top_k=similarity_top_k)
         retriever = AutoMergingRetriever(
-            base_retriever, automerging_index.storage_context, verbose=True
+            base_retriever, index.storage_context, verbose=True
         )
         rerank = SentenceTransformerRerank(top_n=rerank_top_n, model=rerank_model)
         auto_merging_engine = RetrieverQueryEngine.from_args(
@@ -140,7 +162,41 @@ class SentenceWindowRetrievalPipeline:
         cls.verbose = verbose
         cls.rerank_model = rerank_model
 
-    def from_query_engine(cls, documents: List[Document] = None):
+    @staticmethod
+    def from_default_query_engine(
+        llm=OpenAI(model="gpt-3.5-turbo"),
+        embed_model="local:BAAI/bge-small-en-v1.5",
+        sentence_window_size=3,
+        persist_dir="",
+        similarity_top_k=6,
+        rerank_top_n=2,
+        rerank_model="BAAI/bge-reranker-base",
+        documents: List[Document] = None,
+        verbose=False,
+    ):
+        index = SentenceWindowRetrievalPipeline.from_default_index(
+            llm=llm,
+            persist_dir=persist_dir,
+            sentence_window_size=sentence_window_size,
+            verbose=verbose,
+            documents=documents,
+        )
+
+        query_engine = SentenceWindowRetrievalPipeline.from_query_engine(
+            index=index,
+            similarity_top_k=similarity_top_k,
+            rerank_top_n=rerank_top_n,
+            rerank_model=rerank_model,
+            verbose=verbose,
+        )
+
+        return query_engine
+
+    def get_llm_with_tools(
+        cls, llm=None, documents=None, sentence_window_size=3, *args, **kwargs
+    ):
+        from llama_index.tools import QueryEngineTool, ToolMetadata
+
         sentence_window_index = cls.get_sentence_window_index(
             llm=cls.llm,
             persist_dir=cls.persist_dir,
@@ -149,22 +205,41 @@ class SentenceWindowRetrievalPipeline:
             documents=documents,
         )
 
-        query_engine = cls.get_sentence_window_query_engine(
-            sentence_window_index=sentence_window_index,
-            similarity_top_k=cls.similarity_top_k,
-            rerank_top_n=cls.rerank_top_n,
-            rerank_model=cls.rerank_model,
-            verbose=cls.verbose,
+        individual_query_engine_tools = [
+            QueryEngineTool(
+                query_engine=sentence_window_index.as_query_engine(),
+                metadata=ToolMetadata(
+                    name=f"ProductSearch",
+                    description="useful for when you need to answer questions about the food and drinks menu information",
+                ),
+            )
+        ]
+
+        tools = individual_query_engine_tools  # + [query_engine_tool]
+        from llama_index.agent import OpenAIAgent, ReActAgent
+        from llama_index.prompts import PromptTemplate
+        from llama_index.llms import ChatMessage, MessageRole
+
+        custom_chat_history = [
+            ChatMessage(
+                role=MessageRole.SYSTEM,
+                content="You are working for Delhi Tummy a north indian food delivery company. Your name is Akshat Singh and the conversation will happen over the call.",
+            ),
+        ]
+
+        # agent = OpenAIAgent.from_tools(tools, verbose=True)
+        agent = ReActAgent.from_tools(
+            tools, verbose=True, chat_history=custom_chat_history
         )
 
-        return query_engine
+        return agent
 
     @staticmethod
-    def get_sentence_window_index(
-        llm,
-        persist_dir: str,
+    def from_default_index(
+        llm=None,
+        persist_dir: str = None,
         sentence_window_size=3,
-        verbose: bool = True,
+        verbose: bool = False,
         documents: List[Document] = None,
         *args,
         **kwargs,
@@ -181,11 +256,14 @@ class SentenceWindowRetrievalPipeline:
             original_text_metadata_key=original_text_metadata_key,
         )
 
+        llm = llm or OpenAI(model="gpt-3.5-turbo")
         sentence_context = ServiceContext.from_defaults(
             llm=llm,
             embed_model=embed_model,
             node_parser=node_parser,
         )
+
+        persist_dir = persist_dir or SENTENCE_WINDOW_INDEX_DEFAULT_DIR
 
         if not os.path.exists(persist_dir):
             if verbose:
@@ -209,10 +287,10 @@ class SentenceWindowRetrievalPipeline:
         return sentence_index
 
     @staticmethod
-    def get_sentence_window_query_engine(
-        sentence_window_index,
-        similarity_top_k=6,
-        rerank_top_n=2,
+    def from_query_engine(
+        index: VectorStoreIndex,
+        similarity_top_k: int = 6,
+        rerank_top_n: int = 2,
         rerank_model="BAAI/bge-reranker-base",
         verbose=False,
         *args,
@@ -229,7 +307,7 @@ class SentenceWindowRetrievalPipeline:
         # re ranking
         rerank = SentenceTransformerRerank(top_n=rerank_top_n, model=rerank_model)
 
-        sentence_window_engine = sentence_window_index.as_query_engine(
+        sentence_window_engine = index.as_query_engine(
             similarity_top_k=similarity_top_k,  # we need more larger context to be fetched and feed to re rank
             node_postprocessors=[postproc, rerank],
         )
