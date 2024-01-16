@@ -4,6 +4,17 @@ import numpy as np
 from typing import List
 from trulens_utils.utils.constant import Constant as C
 
+from langchain_llama.prompt.variables import (
+    CONVERSATION_PROMPT_VARIABLES,
+    CONVERSATION_PROMPT_PARTIAL_VARIABLES,
+    CONVERSATION_TOOLS_PROMPT_PARTIAL_VARIABLES,
+    CONVERSATION_TOOLS_PROMPT_VARIABLES,
+    AI_PREFIX,
+)
+import warnings
+
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 
 class LangchainTrulensEval:
     def __init__(
@@ -32,6 +43,7 @@ class LangchainTrulensEval:
         from trulens_eval.app import App
         from trulens_eval import TruChain
 
+        print("==============", type(cls.rag_chain))
         context = App.select_context(cls.rag_chain)
 
         grounded = Groundedness(groundedness_provider=cls.provider)
@@ -57,8 +69,6 @@ class LangchainTrulensEval:
             .on(context)
             .aggregate(np.mean)
         )
-
-        feedbacks = [f_qa_relevance, f_context_relevance, f_groundedness]
         tru_recorder = TruChain(
             cls.rag_chain,
             app_id="Chain1_ChatApplication",
@@ -70,9 +80,20 @@ class LangchainTrulensEval:
     def run_evals(cls, eval_questions: List[str], start_dashboard=False):
         if start_dashboard:
             Tru(database_file=cls.database_file).run_dashboard()
+
         for question in eval_questions:
             with cls.trulens_recorder as recording:
-                response = cls.rag_chain.invoke(question)
+                # response = cls.rag_chain.invoke(question)
+
+                response = chain.rag_chain.invoke(
+                    dict(
+                        input="",
+                        conversation_stage="1",
+                        conversation_history=f"user: {question}",
+                        **CONVERSATION_TOOLS_PROMPT_VARIABLES,
+                        conversation_stages="\n",
+                    )
+                )
                 if cls.verbose:
                     print(response)
 
@@ -83,7 +104,7 @@ class LlamaindexTrulensEval:
         query_engine,
         app_id: str,
         database_file: str,
-        provider=False,
+        provider=None,  # open ai
         verbose=False,
         fresh=False,
     ):
@@ -97,7 +118,10 @@ class LlamaindexTrulensEval:
         if cls.fresh:
             if cls.verbose:
                 print(f"Resetting database file: {database_file}")
-            Tru(database_file=cls.database_file).reset_database()
+            cls.tru = Tru(database_file=cls.database_file).reset_database()
+
+        else:
+            cls.tru = Tru(database_file=cls.database_file)
 
         cls.trulens_recorder = cls.get_triad_trulens_recorder()
 
@@ -130,11 +154,57 @@ class LlamaindexTrulensEval:
         )
         return tru_recorder
 
-    def run_evals(cls, eval_questions: List[str], start_dashboard=False):
+    def show_leaderboard(cls):
+        leaderboard = cls.tru.get_leaderboard(app_ids=[cls.app_id])
+        print(leaderboard)
+        
+    def run_evals(
+        cls, eval_questions: List[str], start_dashboard=False, show_progress=False
+    ):
         if start_dashboard:
             Tru(database_file=cls.database_file).run_dashboard()
-        for question in eval_questions:
+
+        from tqdm import tqdm
+
+        pbar = eval_questions
+        if show_progress:
+            pbar = tqdm(eval_questions)
+
+        for question in pbar:
+            if show_progress:
+                pbar.set_description(f"Eval Que= {question}")
             with cls.trulens_recorder as recording:
                 response = cls.query_engine.query(question)
                 if cls.verbose:
                     print(response)
+
+
+if __name__ == "__main__":
+    from langchain_llama.agent.sales_gpt import SalesGPT
+    from trulens_utils.utils.evals_questions import EVAL_QUESTION
+
+    chain = SalesGPT.from_llm(
+        verbose=True,
+        use_tools=True,
+    )
+
+    # print(
+    #     chain.sales_agent_executor.invoke(
+    #         dict(
+    #             input="",
+    #             conversation_stage="1",
+    #             conversation_history=f"user: {EVAL_QUESTION[0]}",
+    #             **CONVERSATION_TOOLS_PROMPT_VARIABLES,
+    #             conversation_stages="\n",
+    #         )
+    #     )
+    # )
+
+    trueval = LangchainTrulensEval(
+        rag_chain=chain.sales_agent_executor,
+        database_file="langchain_turlens",
+        app_id="langchain",
+        fresh=True,
+    )
+
+    # trueval.run_evals(eval_questions=EVAL_QUESTION)

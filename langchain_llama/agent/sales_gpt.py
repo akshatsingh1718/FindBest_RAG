@@ -301,6 +301,7 @@ class SalesGPT(Chain):
                 tools=tools,
                 verbose=verbose,
             )
+
         else:
             sales_agent_executor = None
             knowledge_base = None

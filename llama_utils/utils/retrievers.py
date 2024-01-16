@@ -187,25 +187,6 @@ class AutoMergingRetrievalPipeline(BaseRetrievalPipeline):
 
 
 class SentenceWindowRetrievalPipeline(BaseRetrievalPipeline):
-    def __init__(
-        cls,
-        llm,
-        embed_model="local:BAAI/bge-small-en-v1.5",
-        sentence_window_size=3,
-        persist_dir="sentence_index",
-        similarity_top_k=6,
-        rerank_top_n=2,
-        rerank_model="BAAI/bge-reranker-base",
-        verbose=False,
-    ):
-        cls.llm = llm
-        cls.embed_model = embed_model
-        cls.sentence_window_size = sentence_window_size
-        cls.persist_dir = persist_dir
-        cls.similarity_top_k = similarity_top_k
-        cls.rerank_top_n = rerank_top_n
-        cls.verbose = verbose
-        cls.rerank_model = rerank_model
 
     @staticmethod
     def from_default_query_engine(
