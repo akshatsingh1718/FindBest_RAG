@@ -51,7 +51,7 @@ class AutoMergingRetrievalPipeline:
         llm=OpenAI(model="gpt-3.5-turbo"),
         embed_model="local:BAAI/bge-small-en-v1.5",
         chunk_sizes: List[int] = [2048, 512, 128],
-        persist_dir="automerging_index",
+        persist_dir: str = "",
         similarity_top_k: int = 6,
         rerank_top_n: int = 2,
         rerank_model="BAAI/bge-reranker-base",
@@ -87,9 +87,6 @@ class AutoMergingRetrievalPipeline:
         **kwargs,
     ):
         embed_model = kwargs.pop("embed_model", "local:BAAI/bge-small-en-v1.5")
-        node_parser = HierarchicalNodeParser.from_defaults(chunk_sizes=chunk_sizes)
-        nodes = node_parser.get_nodes_from_documents(documents)
-        leaf_nodes = get_leaf_nodes(nodes)
 
         llm = llm or OpenAI(model="gpt-3.5-turbo")
 
@@ -97,12 +94,22 @@ class AutoMergingRetrievalPipeline:
             llm=llm,
             embed_model=embed_model,
         )
-        storage_context = StorageContext.from_defaults()
-        storage_context.docstore.add_documents(nodes)
 
         persist_dir = persist_dir or AUTO_MERGING_INDEX_DEFAULT_DIR
 
         if not os.path.exists(persist_dir):
+            if not documents:
+                raise ValueError(
+                    f"Documents should be provided when persist dir is not available"
+                )
+            node_parser = HierarchicalNodeParser.from_defaults(chunk_sizes=chunk_sizes)
+
+            nodes = node_parser.get_nodes_from_documents(documents)
+            leaf_nodes = get_leaf_nodes(nodes)
+
+            storage_context = StorageContext.from_defaults()
+            storage_context.docstore.add_documents(nodes)
+
             automerging_index = VectorStoreIndex(
                 leaf_nodes,
                 storage_context=storage_context,

@@ -15,6 +15,8 @@ from llama_utils.utils.common import (
     SENTENCE_WINDOW_INDEX,
     OPENAI_DEFAULT_MODEL,
 )
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 """
 https://docs.llamaindex.ai/en/stable/examples/low_level/vector_store.html
@@ -99,6 +101,8 @@ class LlamaGPTAgent:
         )
 
     def human_step(cls, human_input: str):
+        print("=======================")
+        print(human_input)
         ai_message = cls.agent_with_tools.chat(human_input)
 
         if cls.verbose:

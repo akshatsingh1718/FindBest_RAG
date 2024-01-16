@@ -1,351 +1,351 @@
 =================
-Available Dishes Details
+Delhi Tummy Available Dishes Details
 =================
 
-Available Dishes Name:
+Delhi Tummy Available Dishes Name:
 -----------------------------------
 Butter Chicken, Rajma Chawal, Chole Bhature, Aloo Tikki, Paneer Tikka, Malai Kofta, Chicken Biryani, Dal Makhani, Pani Puri, Gulab Jamun, Tandoori Chicken, Palak Paneer, Masala Dosa, Aloo Paratha, Chicken Tikka Masala, Rabri, Chilli Paneer, Kheer, Matar Paneer, Chicken Curry, Gajar Ka Halwa, Papdi Chaat, Chicken Biryani, Dal Tadka, Samosa, Shahi Paneer, Lassi, Chicken Korma, Pani Puri, Chana Masala, Rasgulla, Aloo Gobi, Chicken Tikka, Malpua, Dahi Vada, Mutton Rogan Josh, Prawn Curry, Kheer, Chana Bhatura, Chicken Seekh Kebab, Gajar Halwa, Paneer Butter Masala, Papri Chaat, Chicken Biryani, Matar Pulao, Paneer Pakora, Shahi Tukda, Aloo Samosa, Chicken Do Pyaza, Rasmalai
 ------------------------------------
 
-Available Dishes Details:
+Delhi Tummy Available Dishes Details:
 ------------------------------------
-1. Dish name: Butter Chicken
+1. Delhi Tummy Dish name: Butter Chicken
    Price: 250 Rupees
    Description: Creamy tomato-based curry with tender chicken pieces.
    Ingredients: Chicken, butter, tomatoes, cream, spices.
    Is Vegetarian: No
    Dish Course: Main Course
 
-2. Dish name: Rajma Chawal
+2. Delhi Tummy Dish name: Rajma Chawal
    Price: 150 Rupees
    Description: Red kidney beans cooked in a thick gravy, served with rice.
    Ingredients: Kidney beans, onions, tomatoes, spices.
    Is Vegetarian: Yes
    Dish Course: Main Course
 
-3. Dish name: Chole Bhature
+3. Delhi Tummy Dish name: Chole Bhature
    Price: 180 Rupees
    Description: Spicy chickpea curry served with deep-fried bread.
    Ingredients: Chickpeas, onions, tomatoes, spices, flour.
    Is Vegetarian: Yes
    Dish Course: Main Course
 
-4. Dish name: Aloo Tikki
+4. Delhi Tummy Dish name: Aloo Tikki
    Price: 80 Rupees
    Description: Crispy potato patties served with mint chutney.
    Ingredients: Potatoes, spices, breadcrumbs.
    Is Vegetarian: Yes
    Dish Course: Appetizer
 
-5. Dish name: Paneer Tikka
+5. Delhi Tummy Dish name: Paneer Tikka
    Price: 200 Rupees
    Description: Grilled cottage cheese marinated in spices.
    Ingredients: Paneer (cottage cheese), yogurt, spices.
    Is Vegetarian: Yes
    Dish Course: Appetizer
 
-6. Dish name: Malai Kofta
+6. Delhi Tummy Dish name: Malai Kofta
    Price: 220 Rupees
    Description: Deep-fried cottage cheese and potato dumplings in a creamy gravy.
    Ingredients: Paneer (cottage cheese), potatoes, cream, spices.
    Is Vegetarian: Yes
    Dish Course: Main Course
 
-7. Dish name: Chicken Biryani
+7. Delhi Tummy Dish name: Chicken Biryani
    Price: 280 Rupees
    Description: Fragrant rice cooked with flavorful spices and tender chicken.
    Ingredients: Chicken, rice, spices, saffron.
    Is Vegetarian: No
    Dish Course: Main Course
 
-8. Dish name: Dal Makhani
+8. Delhi Tummy Dish name: Dal Makhani
    Price: 160 Rupees
    Description: Slow-cooked black lentils in a creamy buttery sauce.
    Ingredients: Black lentils, butter, cream, spices.
    Is Vegetarian: Yes
    Dish Course: Main Course
 
-9. Dish name: Pani Puri
+9. Delhi Tummy Dish name: Pani Puri
    Price: 100 Rupees
    Description: Crispy hollow puris filled with spicy tangy water and chickpeas.
    Ingredients: Semolina, chickpeas, spices, tamarind water.
    Is Vegetarian: Yes
    Dish Course: Appetizer
 
-10. Dish name: Gulab Jamun
+10. Delhi Tummy Dish name: Gulab Jamun
     Price: 120 Rupees
     Description: Deep-fried milk dumplings soaked in sugar syrup.
     Ingredients: Milk solids, sugar, cardamom.
     Is Vegetarian: Yes
     Dish Course: Dessert
 
-11. Dish name: Tandoori Chicken
+11. Delhi Tummy Dish name: Tandoori Chicken
     Price: 240 Rupees
     Description: Juicy chicken marinated in yogurt and spices, cooked in a tandoor.
     Ingredients: Chicken, yogurt, spices.
     Is Vegetarian: No
     Dish Course: Appetizer
 
-12. Dish name: Palak Paneer
+12. Delhi Tummy Dish name: Palak Paneer
     Price: 200 Rupees
     Description: Cottage cheese cubes in a creamy spinach gravy.
     Ingredients: Paneer (cottage cheese), spinach, cream, spices.
     Is Vegetarian: Yes
     Dish Course: Main Course
 
-13. Dish name: Masala Dosa
+13. Delhi Tummy Dish name: Masala Dosa
     Price: 150 Rupees
     Description: Thin crispy rice and lentil crepes filled with spicy potato masala.
     Ingredients: Rice, lentils, potatoes, spices.
     Is Vegetarian: Yes
     Dish Course: Main Course
 
-14. Dish name: Aloo Paratha
+14. Delhi Tummy Dish name: Aloo Paratha
     Price: 100 Rupees
     Description: Whole wheat bread stuffed with spiced mashed potatoes, cooked on a griddle.
     Ingredients: Wheat flour, potatoes, spices.
     Is Vegetarian: Yes
     Dish Course: Main Course
 
-15. Dish name: Chicken Tikka Masala
+15. Delhi Tummy Dish name: Chicken Tikka Masala
     Price: 260 Rupees
     Description: Grilled chicken in a rich tomato-based curry.
     Ingredients: Chicken, tomatoes, cream, spices.
     Is Vegetarian: No
     Dish Course: Main Course
 
-16. Dish name: Rabri
+16. Delhi Tummy Dish name: Rabri
     Price: 140 Rupees
     Description: Sweet condensed milk dessert, garnished with nuts.
     Ingredients: Milk, sugar, nuts.
     Is Vegetarian: Yes
     Dish Course: Dessert
 
-17. Dish name: Chilli Paneer
+17. Delhi Tummy Dish name: Chilli Paneer
     Price: 180 Rupees
     Description: Stir-fried paneer cubes with bell peppers and onions in a spicy sauce.
     Ingredients: Paneer (cottage cheese), bell peppers, onions, spices.
     Is Vegetarian: Yes
     Dish Course: Appetizer
 
-18. Dish name: Kheer
+18. Delhi Tummy Dish name: Kheer
     Price: 160 Rupees
     Description: Creamy rice pudding flavored with cardamom and garnished with nuts.
     Ingredients: Rice, milk, sugar, cardamom, nuts.
     Is Vegetarian: Yes
     Dish Course: Dessert
 
-19. Dish name: Matar Paneer
+19. Delhi Tummy Dish name: Matar Paneer
     Price: 200 Rupees
     Description: Cottage cheese and green peas cooked in a tomato-based gravy.
     Ingredients: Paneer (cottage cheese), green peas, tomatoes, spices.
     Is Vegetarian: Yes
     Dish Course: Main Course
 
-20. Dish name: Chicken Curry
+20. Delhi Tummy Dish name: Chicken Curry
     Price: 240 Rupees
     Description: Spicy chicken curry with a blend of aromatic spices.
     Ingredients: Chicken, onions, tomatoes, spices.
     Is Vegetarian: No
     Dish Course: Main Course
 
-21. Dish name: Gajar Ka Halwa
+21. Delhi Tummy Dish name: Gajar Ka Halwa
     Price: 140 Rupees
     Description: Carrot pudding made with grated carrots, milk, and sugar, garnished with nuts.
     Ingredients: Carrots, milk, sugar, nuts.
     Is Vegetarian: Yes
     Dish Course: Dessert
 
-22. Dish name: Papdi Chaat
+22. Delhi Tummy Dish name: Papdi Chaat
     Price: 120 Rupees
     Description: Crispy papdis topped with yogurt, chutneys, and spices.
     Ingredients: Papdis, yogurt, chutneys, spices.
     Is Vegetarian: Yes
     Dish Course: Appetizer
 
-23. Dish name: Chicken Biryani
+23. Delhi Tummy Dish name: Chicken Biryani
     Price: 280 Rupees
     Description: Fragrant rice cooked with flavorful spices and tender chicken.
     Ingredients: Chicken, rice, spices, saffron.
     Is Vegetarian: No
     Dish Course: Main Course
 
-24. Dish name: Dal Tadka
+24. Delhi Tummy Dish name: Dal Tadka
     Price: 160 Rupees
     Description: Yellow lentils tempered with spices and garnished with cilantro.
     Ingredients: Yellow lentils, spices, ghee, cilantro.
     Is Vegetarian: Yes
     Dish Course: Main Course
 
-25. Dish name: Samosa
+25. Delhi Tummy Dish name: Samosa
     Price: 80 Rupees
     Description: Crispy fried pastry filled with spiced potatoes and peas.
     Ingredients: Potatoes, peas, spices, flour.
     Is Vegetarian: Yes
     Dish Course: Appetizer
 
-26. Dish name: Shahi Paneer
+26. Delhi Tummy Dish name: Shahi Paneer
     Price: 220 Rupees
     Description: Cottage cheese cubes in a rich and creamy tomato-based gravy.
     Ingredients: Paneer (cottage cheese), tomatoes, cream, spices.
     Is Vegetarian: Yes
     Dish Course: Main Course
 
-28. Dish name: Chicken Korma
+28. Delhi Tummy Dish name: Chicken Korma
     Price: 260 Rupees
     Description: Chicken cooked in a rich and creamy cashew-based gravy.
     Ingredients: Chicken, cashews, cream, spices.
     Is Vegetarian: No
     Dish Course: Main Course
 
-29. Dish name: Pani Puri
+29. Delhi Tummy Dish name: Pani Puri
     Price: 100 Rupees
     Description: Crispy hollow puris filled with spicy tangy water and chickpeas.
     Ingredients: Semolina, chickpeas, spices, tamarind water.
     Is Vegetarian: Yes
     Dish Course: Appetizer
 
-30. Dish name: Chana Masala
+30. Delhi Tummy Dish name: Chana Masala
     Price: 180 Rupees
     Description: Spicy chickpea curry cooked with onions and tomatoes.
     Ingredients: Chickpeas, onions, tomatoes, spices.
     Is Vegetarian: Yes
     Dish Course: Main Course
 
-31. Dish name: Rasgulla
+31. Delhi Tummy Dish name: Rasgulla
     Price: 120 Rupees
     Description: Soft and spongy cottage cheese balls soaked in sugar syrup.
     Ingredients: Cottage cheese, sugar, rose water.
     Is Vegetarian: Yes
     Dish Course: Dessert
 
-32. Dish name: Aloo Gobi
+32. Delhi Tummy Dish name: Aloo Gobi
     Price: 160 Rupees
     Description: Cauliflower and potatoes cooked with spices and herbs.
     Ingredients: Cauliflower, potatoes, spices.
     Is Vegetarian: Yes
     Dish Course: Main Course
 
-33. Dish name: Chicken Tikka
+33. Delhi Tummy Dish name: Chicken Tikka
     Price: 240 Rupees
     Description: Grilled chicken marinated in yogurt and spices.
     Ingredients: Chicken, yogurt, spices.
     Is Vegetarian: No
     Dish Course: Appetizer
 
-34. Dish name: Malpua
+34. Delhi Tummy Dish name: Malpua
     Price: 140 Rupees
     Description: Sweet pancakes made with flour, milk, and sugar syrup.
     Ingredients: Flour, milk, sugar, cardamom.
     Is Vegetarian: Yes
     Dish Course: Dessert
 
-35. Dish name: Dahi Vada
+35. Delhi Tummy Dish name: Dahi Vada
     Price: 120 Rupees
     Description: Lentil fritters soaked in yogurt and topped with chutneys.
     Ingredients: Lentils, yogurt, chutneys, spices.
     Is Vegetarian: Yes
     Dish Course: Appetizer
 
-36. Dish name: Mutton Rogan Josh
+36. Delhi Tummy Dish name: Mutton Rogan Josh
     Price: 300 Rupees
     Description: Slow-cooked lamb curry in a flavorful gravy.
     Ingredients: Lamb, onions, tomatoes, spices.
     Is Vegetarian: No
     Dish Course: Main Course
 
-37. Dish name: Prawn Curry
+37. Delhi Tummy Dish name: Prawn Curry
     Price: 280 Rupees
     Description: Spicy prawn curry with aromatic spices.
     Ingredients: Prawns, onions, tomatoes, spices.
     Is Vegetarian: No
     Dish Course: Main Course
 
-38. Dish name: Kheer
+38. Delhi Tummy Dish name: Kheer
     Price: 160 Rupees
     Description: Creamy rice pudding flavored with cardamom and garnished with nuts.
     Ingredients: Rice, milk, sugar, cardamom, nuts.
     Is Vegetarian: Yes
     Dish Course: Dessert
 
-39. Dish name: Chana Bhatura
+39. Delhi Tummy Dish name: Chana Bhatura
     Price: 180 Rupees
     Description: Spicy chickpea curry served with deep-fried bread.
     Ingredients: Chickpeas, onions, tomatoes, spices, flour.
     Is Vegetarian: Yes
     Dish Course: Main Course
 
-40. Dish name: Chicken Seekh Kebab
+40. Delhi Tummy Dish name: Chicken Seekh Kebab
     Price: 220 Rupees
     Description: Skewered minced chicken kebabs cooked in a tandoor.
     Ingredients: Chicken, spices, yogurt.
     Is Vegetarian: No
     Dish Course: Appetizer
 
-41. Dish name: Gajar Halwa
+41. Delhi Tummy Dish name: Gajar Halwa
     Price: 140 Rupees
     Description: Carrot pudding made with grated carrots, milk, and sugar, garnished with nuts.
     Ingredients: Carrots, milk, sugar, nuts.
     Is Vegetarian: Yes
     Dish Course: Dessert
 
-42. Dish name: Paneer Butter Masala
+42. Delhi Tummy Dish name: Paneer Butter Masala
     Price: 200 Rupees
     Description: Cottage cheese cubes cooked in a rich and creamy tomato-based gravy.
     Ingredients: Paneer (cottage cheese), tomatoes, butter, cream, spices.
     Is Vegetarian: Yes
     Dish Course: Main Course
 
-43. Dish name: Papri Chaat
+43. Delhi Tummy Dish name: Papri Chaat
     Price: 120 Rupees
     Description: Crispy papris topped with yogurt, chutneys, and spices.
     Ingredients: Papris, yogurt, chutneys, spices.
     Is Vegetarian: Yes
     Dish Course: Appetizer
 
-44. Dish name: Chicken Biryani
+44. Delhi Tummy Dish name: Chicken Biryani
     Price: 280 Rupees
     Description: Fragrant rice cooked with flavorful spices and tender chicken.
     Ingredients: Chicken, rice, spices, saffron.
     Is Vegetarian: No
     Dish Course: Main Course
 
-45. Dish name: Matar Pulao
+45. Delhi Tummy Dish name: Matar Pulao
     Price: 160 Rupees
     Description: Fragrant rice cooked with green peas and aromatic spices.
     Ingredients: Rice, green peas, spices.
     Is Vegetarian: Yes
     Dish Course: Main Course
 
-46. Dish name: Paneer Pakora
+46. Delhi Tummy Dish name: Paneer Pakora
     Price: 180 Rupees
     Description: Deep-fried cottage cheese fritters.
     Ingredients: Paneer (cottage cheese), gram flour, spices.
     Is Vegetarian: Yes
     Dish Course: Appetizer
 
-47. Dish name: Shahi Tukda
+47. Delhi Tummy Dish name: Shahi Tukda
     Price: 140 Rupees
     Description: Deep-fried bread soaked in sweetened milk and garnished with nuts.
     Ingredients: Bread, milk, sugar, nuts.
     Is Vegetarian: Yes
     Dish Course: Dessert
 
-48. Dish name: Aloo Samosa
+48. Delhi Tummy Dish name: Aloo Samosa
     Price: 100 Rupees
     Description: Crispy fried pastry filled with spiced potatoes.
     Ingredients: Potatoes, spices, flour.
     Is Vegetarian: Yes
     Dish Course: Appetizer
 
-49. Dish name: Chicken Do Pyaza
+49. Delhi Tummy Dish name: Chicken Do Pyaza
     Price: 260 Rupees
     Description: Tender chicken cooked with onions in a rich and spicy gravy.
     Ingredients: Chicken, onions, tomatoes, spices.
     Is Vegetarian: No
     Dish Course: Main Course
 
-50. Dish name: Rasmalai
+50. Delhi Tummy Dish name: Rasmalai
     Price: 120 Rupees
     Description: Soft cottage cheese dumplings soaked in sweetened milk and flavored with cardamom.
     Ingredients: Cottage cheese, milk, sugar, cardamom.
@@ -355,81 +355,81 @@ Available Dishes Details:
 
 
 =================
-Available Drinks Details
+Delhi Tummy Available Drinks Details
 =================
 
-Available Drinks Name:
+Delhi Tummy Available Drinks Name:
 -----------------------------------
 Masala Chai, Mango Lassi, Thandai, Jal Jeera, Nimbu Pani, Badam Milk, Aam Panna, Saffron Milk, Buttermilk, Rose Sharbat.
 -----------------------------------
 
 
-Available Drinks Details:
+Delhi Tummy Available Drinks Details:
 ------------------------------------
-1. Drink name: Masala Chai
+1. Delhi Tummy Drink name: Masala Chai
 Price: 30 Rupees
 Description: A traditional Indian spiced tea with a rich and aromatic flavor.
 Ingredients: Tea leaves, milk, water, ginger, cardamom, cinnamon, cloves, sugar
 Is_vegetarian: Yes
 Dish course: Beverage
 
-2. Drink name: Mango Lassi
+2. Delhi Tummy Drink name: Mango Lassi
 Price: 60 Rupees
 Description: A refreshing and creamy yogurt-based drink with the tropical sweetness of mangoes.
 Ingredients: Yogurt, mango pulp, milk, sugar
 Is_vegetarian: Yes
 Dish course: Beverage
 
-3. Drink name: Thandai
+3. Delhi Tummy Drink name: Thandai
 Price: 40 Rupees
 Description: A cool and creamy drink made with a blend of almonds, pistachios, fennel seeds, and rose water.
 Ingredients: Milk, almonds, pistachios, fennel seeds, rose water, sugar
 Is_vegetarian: Yes
 Dish course: Beverage
 
-4. Drink name: Jal Jeera
+4. Delhi Tummy Drink name: Jal Jeera
 Price: 35 Rupees
 Description: A tangy and refreshing drink made with a mix of spices and mint, perfect for beating the heat.
 Ingredients: Cumin seeds, mint leaves, tamarind pulp, black salt, lemon juice, water
 Is_vegetarian: Yes
 Dish course: Beverage
 
-5. Drink name: Nimbu Pani
+5. Delhi Tummy Drink name: Nimbu Pani
 Price: 25 Rupees
 Description: A classic Indian lemonade, sweet, and tangy, with a hint of salt and spices.
 Ingredients: Lemon juice, water, sugar, salt, black salt, cumin powder
 Is_vegetarian: Yes
 Dish course: Beverage
 
-6. Drink name: Badam Milk
+6. Delhi Tummy Drink name: Badam Milk
 Price: 50 Rupees
 Description: A rich and creamy milkshake infused with the flavors of almonds and saffron.
 Ingredients: Milk, almonds, saffron, sugar
 Is_vegetarian: Yes
 Dish course: Beverage
 
-7. Drink name: Aam Panna
+7. Delhi Tummy Drink name: Aam Panna
 Price: 45 Rupees
 Description: A cooling and tangy drink made with raw mangoes, flavored with spices like cumin and black salt.
 Ingredients: Raw mangoes, sugar, roasted cumin powder, black salt, mint leaves
 Is_vegetarian: Yes
 Dish course: Beverage
 
-8. Drink name: Saffron Milk
+8. Delhi Tummy Drink name: Saffron Milk
 Price: 55 Rupees
 Description: A luxurious and aromatic milk-based drink infused with the delicate flavor of saffron.
 Ingredients: Milk, saffron, sugar
 Is_vegetarian: Yes
 Dish course: Beverage
 
-9. Drink name: Buttermilk
+9. Delhi Tummy Drink name: Buttermilk
 Price: 30 Rupees
 Description: A refreshing and cooling drink made with yogurt, water, and seasoned with spices like cumin and black salt.
 Ingredients: Yogurt, water, roasted cumin powder, black salt, mint leaves
 Is_vegetarian: Yes
 Dish course: Beverage
 
-10. Drink name: Rose Sharbat
+10. Delhi Tummy Drink name: Rose Sharbat
 Price: 40 Rupees
 Description: A fragrant and refreshing drink made with rose syrup, water, and a touch of lemon.
 Ingredients: Rose syrup, water, lemon juice, sugar

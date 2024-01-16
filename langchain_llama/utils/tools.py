@@ -11,6 +11,8 @@ from typing import List
 def setup_knowledge_base_from_text(product_catalog: str= None):
     text_splitter= CharacterTextSplitter(chunk_size= 400, chunk_overlap= 50, separator="\n")
     texts= text_splitter.split_text(product_catalog)
+    print("splitter ------------------")
+    print(texts[0])
 
     llm= ChatOpenAI(temperature= 0)
     embeddings= OpenAIEmbeddings()
@@ -42,9 +44,9 @@ def get_tools(knowledge_base: Chain)-> List[Tool]:
     """knowledge_base: it is RetrievalQA Chain"""
     tools= [
         Tool(
-            name="ProductSearch",
+            name="Menu",
             func=knowledge_base.run,
-            description= "useful for when you need to answer questions about proudct information"
+            description= "useful for when you need to answer questions about the food and drinks menu"
         )
     ]
 

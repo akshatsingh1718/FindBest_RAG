@@ -1,21 +1,24 @@
-from agent.agent import SalesGPT
+# from agent.agent import SalesGPT
 from langchain.chat_models import ChatOpenAI
 from dotenv import load_dotenv
 import json
 import argparse
-from prompt.variables import AI_PREFIX
-from conversation.stages import END_CONVERSATION_STAGE_ID
+# from prompt.variables import AI_PREFIX
+from langchain_utils.utils.stages import END_CONVERSATION_STAGE_ID
+# from langchain_utils.agent.agent import SalesGPT
+from langchain_llama.agent.sales_gpt import SalesGPT
+from langchain_utils.prompt.variables import AI_PREFIX
 
-class ChatEngine:
+class LangchainCLIChatEngine:
     def __init__(
         self,
         llm,
-        catalogue_path: str,
+        documents: str,
         verbose: bool = False,
         use_tools: bool = False,
     ):
         self.llm = llm
-        self.catalogue_path = catalogue_path
+        self.documents = documents
         self.verbose = verbose
         self.use_tools = use_tools
 
@@ -32,7 +35,7 @@ class ChatEngine:
             llm=self.llm,
             use_tools=self.use_tools,
             verbose=self.verbose,
-            product_catalog=self.catalogue_path,
+            documents=self.documents,
         )
 
         agent.seed_agent()
@@ -73,7 +76,7 @@ if __name__ == "__main__":
         "-p", "--prompt_data_path", help="Prompt data json path"
     )
     parser.add_argument("-s", "--stages_path", help="Stages json path eg. stages.json")
-    parser.add_argument("-c", "--catalogue_path", help="Company catalogue details path eg catalogue.txt")
+    parser.add_argument("-d", "--documents", help="documents for RAG")
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose")
     parser.add_argument(
         "-t", "--usetools", action="store_true", help="Add This when to use tools"
@@ -82,9 +85,9 @@ if __name__ == "__main__":
     # Read arguments from command line
     args = parser.parse_args()
 
-    engine = ChatEngine(
+    engine = LangchainCLIChatEngine(
         llm=ChatOpenAI(temperature=0.4, model_name="gpt-3.5-turbo", streaming=True),
-        catalogue_path=args.catalogue_path,
+        documents=args.documents,
         verbose=args.verbose,
         use_tools=args.usetools,
     )
