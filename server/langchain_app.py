@@ -11,7 +11,7 @@ def get_agent():
         documents=["./example/FoodnDrinksCatalogue.txt"],
         sys_msg="You are working for Delhi Tummy a north indian food delivery company. Your name is Akshat Singh and the conversation will happen over the call.",
         verbose=True,
-        retriever="llamaindex-sentence_window",
+        retriever="llamaindex-automerging",
         use_tools = True,
     )
 

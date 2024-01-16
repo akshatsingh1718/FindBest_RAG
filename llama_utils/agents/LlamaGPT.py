@@ -100,7 +100,7 @@ class LlamaGPTAgent:
             ChatMessage(role="assistant", content=ai_input)
         )
 
-    def human_step(cls, human_input: str):
+    def human_step(cls, human_input: str) -> str:
         print("=======================")
         print(human_input)
         ai_message = cls.agent_with_tools.chat(human_input)

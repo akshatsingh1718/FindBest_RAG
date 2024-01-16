@@ -2,33 +2,38 @@ from langchain.chat_models import ChatOpenAI, ChatLiteLLM
 from langchain.chains.base import Chain
 from typing import List, Dict, Any, Union, Callable
 from pydantic import Field
-from langchain_utils.chain.chains import StageAnalyzerChain, ConversationChain, LLMChain
-from langchain_utils.utils.constant import Constant as C
-from langchain_utils.utils.tools import setup_knowledge_base, get_tools
-from langchain_utils.prompt.templates import CustomPromptTemplateForTools
-from langchain_utils.utils.parsers import SalesConvoOutputParser
+from langchain_llama.chain.chains import StageAnalyzerChain, ConversationChain, LLMChain
+from langchain_llama.utils.constant import Constant as C
+from langchain_llama.utils.tools import setup_knowledge_base, get_tools
+from langchain_llama.prompt.templates import CustomPromptTemplateForTools
+from langchain_llama.utils.parsers import SalesConvoOutputParser
 from langchain.agents import LLMSingleActionAgent, AgentExecutor
 from langchain_core.language_models.llms import create_base_retry_decorator
 from litellm import acompletion
 from utils.console import printBold
 from langchain_core.messages import SystemMessage
-from langchain_utils.prompt.prompts import (
+from langchain_llama.prompt.prompts import (
     SALES_AGENT_TOOLS_PROMPT,
     STAGE_ANALYZER_INCEPTION_PROMPT,
     CONVERSATION_AGENT_INCEPTION_PROMPT,
 )
-from langchain_utils.prompt.variables import (
+from langchain_llama.prompt.variables import (
     CONVERSATION_PROMPT_VARIABLES,
     CONVERSATION_PROMPT_PARTIAL_VARIABLES,
     CONVERSATION_TOOLS_PROMPT_PARTIAL_VARIABLES,
     CONVERSATION_TOOLS_PROMPT_VARIABLES,
     AI_PREFIX,
 )
-from langchain_utils.utils.stages import (
+from langchain_llama.utils.stages import (
     CONVERSATION_STAGES,
     END_CONVERSATION_STAGE_ID,
     START_CONVERSATION_STAGE_ID,
 )
+from llama_utils.utils.retrievers import (
+    SentenceWindowRetrievalPipeline,
+    AutoMergingRetrievalPipeline,
+)
+from langchain_llama.agent.tools import ToolsProvider
 
 
 def _create_retry_decorator(llm: Any) -> Callable[[Any], Any]:
@@ -216,7 +221,6 @@ class SalesGPT(Chain):
 
         return ai_message.replace(C.END_OF_TURN, "").replace(f"{AI_PREFIX} :", "")
 
-
     def _acall(self, *args, **kwargs):
         raise NotImplementedError("This method has not been implemented yet.")
 
@@ -234,7 +238,7 @@ class SalesGPT(Chain):
         and all the prompt will be designed by us.
         """
 
-        llm = llm or ChatOpenAI(model_name = C.DEFAULT_MODEL_NAME)
+        llm = llm or ChatOpenAI(model_name=C.DEFAULT_MODEL_NAME)
         stage_analyzer_chain = StageAnalyzerChain.from_llm(
             llm, verbose, prompt=STAGE_ANALYZER_INCEPTION_PROMPT
         )
@@ -250,20 +254,7 @@ class SalesGPT(Chain):
         )
 
         if use_tools:
-
             if retriever_type.startswith("llamaindex"):
-                from llama_index.langchain_helpers.agents import (
-                    IndexToolConfig,
-                    LlamaIndexTool,
-                )
-
-                from llama_utils.utils.retrievers import (
-                    SentenceWindowRetrievalPipeline,
-                    AutoMergingRetrievalPipeline,
-                )
-                from llama_utils.utils.helper import get_single_document
-
-                # query_engine = SentenceWindowRetrievalPipeline.from_default_query_engine()
                 retrieval_pipeline = (
                     SentenceWindowRetrievalPipeline
                     if retriever_type.split("-")[1] == "sentence_window"
@@ -273,17 +264,10 @@ class SalesGPT(Chain):
                 documents = kwargs.get(C.DOCUMENTS_KWARG, [])
 
                 query_engine = retrieval_pipeline.from_default_query_engine(
-                    documents=[get_single_document(documents)]
+                    documents=documents
                 )
 
-                tool_config = IndexToolConfig(
-                    query_engine=query_engine,
-                    name=f"SearchMenu",
-                    description=f"use this tool when you need to search things related to the menu of the restraunt.",
-                    tool_kwargs={"return_direct": True},
-                )
-                tools = LlamaIndexTool.from_tool_config(tool_config)
-                tools = [tools]
+                tools = ToolsProvider.from_tools(query_engine=query_engine)
                 knowledge_base = None
 
             elif retriever_type == "langchain":

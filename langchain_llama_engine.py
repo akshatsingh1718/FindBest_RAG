@@ -4,10 +4,10 @@ from dotenv import load_dotenv
 import json
 import argparse
 # from prompt.variables import AI_PREFIX
-from langchain_utils.utils.stages import END_CONVERSATION_STAGE_ID
-# from langchain_utils.agent.agent import SalesGPT
+from langchain_llama.utils.stages import END_CONVERSATION_STAGE_ID
+# from langchain_llama.agent.agent import SalesGPT
 from langchain_llama.agent.sales_gpt import SalesGPT
-from langchain_utils.prompt.variables import AI_PREFIX
+from langchain_llama.prompt.variables import AI_PREFIX
 
 class LangchainCLIChatEngine:
     def __init__(

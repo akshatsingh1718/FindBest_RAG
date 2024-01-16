@@ -4,6 +4,7 @@ from llama_index import (
     load_index_from_storage,
     StorageContext,
     Document,
+    SimpleDirectoryReader,
 )
 from llama_index.llms import OpenAI
 from llama_index.indices.postprocessor import (
@@ -18,14 +19,54 @@ from llama_index.node_parser import (
 from llama_index.retrievers import AutoMergingRetriever
 from llama_index.query_engine import RetrieverQueryEngine
 import os
-from typing import List
+from typing import List, Optional, Union
 from llama_utils.utils.common import (
     SENTENCE_WINDOW_INDEX_DEFAULT_DIR,
     AUTO_MERGING_INDEX_DEFAULT_DIR,
 )
+from pydantic import BaseModel
+from abc import ABC, abstractmethod
 
 
-class AutoMergingRetrievalPipeline:
+class BaseRetrievalPipeline(ABC, BaseModel):
+    @abstractmethod
+    def from_default_query_engine(*args, **kwargs):
+        pass
+
+    @abstractmethod
+    def from_default_index(*args, **kwargs):
+        pass
+
+    @abstractmethod
+    def from_query_engine(*args, **kwargs):
+        pass
+
+    def resolve_documents(documents: Union[str, List[str], Document, List[Document]]):
+        # if documents is a single path
+        if isinstance(documents, str):
+            documents = [documents]
+
+            documents = SimpleDirectoryReader(input_files=documents).load_data()
+            documents = Document(text="\n\n".join([doc.text for doc in documents]))
+
+        # if docuemnts is a list of path strings
+        if all(isinstance(doc, str) for doc in documents):
+            documents = SimpleDirectoryReader(input_files=documents).load_data()
+            documents = Document(text="\n\n".join([doc.text for doc in documents]))
+
+        # if single document
+        if isinstance(documents, Document):
+            documents = [documents]
+
+        # if documents is a list of documents
+        if all(isinstance(doc, Document) for doc in documents):
+            documents = Document(text="\n\n".join([doc.text for doc in documents]))
+            return [documents]
+        else:
+            raise TypeError(f"Given documents type are not supported.")
+
+
+class AutoMergingRetrievalPipeline(BaseRetrievalPipeline):
     def __init__(
         cls,
         llm,
@@ -98,10 +139,7 @@ class AutoMergingRetrievalPipeline:
         persist_dir = persist_dir or AUTO_MERGING_INDEX_DEFAULT_DIR
 
         if not os.path.exists(persist_dir):
-            if not documents:
-                raise ValueError(
-                    f"Documents should be provided when persist dir is not available"
-                )
+            documents = AutoMergingRetrievalPipeline.resolve_documents(documents)
             node_parser = HierarchicalNodeParser.from_defaults(chunk_sizes=chunk_sizes)
 
             nodes = node_parser.get_nodes_from_documents(documents)
@@ -148,7 +186,7 @@ class AutoMergingRetrievalPipeline:
         return auto_merging_engine
 
 
-class SentenceWindowRetrievalPipeline:
+class SentenceWindowRetrievalPipeline(BaseRetrievalPipeline):
     def __init__(
         cls,
         llm,
@@ -178,7 +216,7 @@ class SentenceWindowRetrievalPipeline:
         similarity_top_k=6,
         rerank_top_n=2,
         rerank_model="BAAI/bge-reranker-base",
-        documents: List[Document] = None,
+        documents: Optional[List[Document]] = None,
         verbose=False,
     ):
         index = SentenceWindowRetrievalPipeline.from_default_index(
@@ -187,6 +225,7 @@ class SentenceWindowRetrievalPipeline:
             sentence_window_size=sentence_window_size,
             verbose=verbose,
             documents=documents,
+            embed_model=embed_model,
         )
 
         query_engine = SentenceWindowRetrievalPipeline.from_query_engine(
@@ -275,6 +314,8 @@ class SentenceWindowRetrievalPipeline:
         if not os.path.exists(persist_dir):
             if verbose:
                 print(f"Creating sentence index to {persist_dir}")
+
+            documents = SentenceWindowRetrievalPipeline.resolve_documents(documents)
 
             sentence_index = VectorStoreIndex.from_documents(
                 documents, service_context=sentence_context

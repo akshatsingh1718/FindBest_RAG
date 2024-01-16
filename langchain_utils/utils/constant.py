@@ -4,7 +4,7 @@ class Constant:
     AI_PREFIX= "ai_prefix"
     DEFAULT_AI_PREFIX= "ai_prefix"
     TOOLS_PROMPT_KWARG= "tools_prompt"
-    PRODUCT_CATALOGUE_KWARG= "product_catalog" 
+    PRODUCT_DOCUMENTS= "product_catalog" 
 
     OBSERVATION= "Observation"
     THOUGHT= "Thought"

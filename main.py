@@ -1,4 +1,4 @@
-from trulens_utils.utils import LlamaTrulensEval
+from trulens_utils.evaluations import LlamaTrulensEval
 import dotenv
 from llama_utils.utils.helper import get_single_document
 from llama_utils.utils.retrievers import (
@@ -52,16 +52,17 @@ def check_llama_agent():
         llm,
         documents=["./example/FoodnDrinksCatalogue.txt"],
         sys_msg="You are working for Delhi Tummy a north indian food delivery company. Your name is Akshat Singh and the conversation will happen over the call.",
-        verbose= True,
+        verbose=True,
         retriever="sentence-window",
     )
 
-    ai_greetings= "How are you today? I hope you're having a great day so far. My name is Akshat Singh and I'm calling from Delhi Tummy. We are a food delivery company that specializes in delicious North Indian food and street food. How can I assist you today?"
-    agent.ai_step(ai_greetings) 
+    ai_greetings = "How are you today? I hope you're having a great day so far. My name is Akshat Singh and I'm calling from Delhi Tummy. We are a food delivery company that specializes in delicious North Indian food and street food. How can I assist you today?"
+    agent.ai_step(ai_greetings)
 
     while True:
         query = input("User: ")
-        agent.human_step( query )
+        agent.human_step(query)
+
 
 if __name__ == "__main__":
     dotenv.load_dotenv()
