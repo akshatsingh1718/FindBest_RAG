@@ -436,3 +436,63 @@ Ingredients: Rose syrup, water, lemon juice, sugar
 Is_vegetarian: Yes
 Dish course: Beverage
 ------------------------------------
+
+
+=================
+About Us:
+=================
+
+Delhi Tummy, founded by the visionary Akshat Singh, is more than just a food delivery company; it's a celebration of the rich culinary heritage of North India. We take pride in curating a menu that reflects the authenticity and flavors of traditional North Indian cuisine.
+
+=================
+Our Mission:
+=================
+
+At Delhi Tummy, our mission is clear – to provide delicious, healthy, and affordable North Indian food to every corner of the country. We believe that no one should compromise on the joy of good food due to budget constraints.
+
+=================
+Meet Our Culinary Maestros:
+=================
+
+Our culinary creations are crafted by some of the finest chefs in Delhi, 
+each bringing their unique expertise to the table. 
+These chefs, under the guidance of Akshat Singh, meticulously blend traditional recipes 
+with modern culinary techniques, ensuring every dish is a gastronomic delight.
+
+=================
+Quality Assurance:
+=================
+
+We understand the importance of quality in every bite. Delhi Tummy's commitment to excellence is reflected in the sourcing of the finest and freshest ingredients. From handpicked vegetables to premium spices, we prioritize quality at every step to deliver an unparalleled dining experience.
+
+=================
+Signature Dishes:
+=================
+
+Indulge in our signature dishes that capture the essence of North Indian cuisine. From the aromatic biryanis to the flavorful kebabs, each dish is a masterpiece, promising a culinary journey like no other. Explore our menu to discover the perfect blend of spices, textures, and flavors.
+
+=================
+Affordability without Compromise:
+=================
+
+Delhi Tummy believes that good food should be accessible to everyone. Our commitment to affordability doesn’t mean compromising on quality. Enjoy a hearty meal without breaking the bank, as we bring you the best of North Indian flavors at pocket-friendly prices.
+
+=================
+Healthy Options:
+=================
+
+For health-conscious food enthusiasts, Delhi Tummy offers a range of nutritious options. From wholesome vegetarian delights to lean protein-packed dishes, we ensure that your taste buds and your well-being are both well taken care of.
+
+=================
+Customer Satisfaction:
+=================
+
+Your satisfaction is our top priority. We welcome feedback to continually enhance our offerings. Customer testimonials speak volumes about the delightful experiences our patrons have had with Delhi Tummy. Your joy fuels our passion for serving great food.
+
+=================
+Stay Connected:
+=================
+
+Follow us for regular updates on special promotions, new additions to the menu, and more. Join our Delhi Tummy family, where the love for North Indian cuisine binds us all together.
+
+Delhi Tummy - Savor the Flavor, Taste the Tradition.

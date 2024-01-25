@@ -1,4 +1,4 @@
-from trulens_utils.evaluations import LlamaTrulensEval
+from trulens_utils.utils.pipeline import LlamaTrulensEval
 import dotenv
 from llama_utils.utils.helper import get_single_document
 from llama_utils.utils.retrievers import (
@@ -67,4 +67,4 @@ def check_llama_agent():
 if __name__ == "__main__":
     dotenv.load_dotenv()
 
-    check_llama_agent()
+    # check_llama_agent()

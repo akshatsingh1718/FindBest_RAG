@@ -1,3 +1,16 @@
+# to run eval
+
+- Open trulens_utils/main.py and change below paths for your usecase:
+    ```py
+    EVAL_QUESTIONS = "example/questions.txt"
+    DOCUMENTS = "./example/FoodnDrinksCatalogue.txt" 
+    ```
+
+- Run main.py as a package:
+`python3 -m trulens_utils.main`
+
+- Dashboard should be started at  `http://192.168.1.8:8501`.
+
 # Things to do
 - [x] Make the prompt variables dynamic in agent.py
 - [ ] Make the conversation prompt utterance template generic to different prompts.

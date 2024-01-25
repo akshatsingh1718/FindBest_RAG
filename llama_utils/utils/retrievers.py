@@ -26,6 +26,8 @@ from llama_utils.utils.common import (
 )
 from pydantic import BaseModel
 from abc import ABC, abstractmethod
+import psutil
+from llama_index.indices.base import BaseIndex
 
 
 class BaseRetrievalPipeline(ABC, BaseModel):
@@ -34,7 +36,7 @@ class BaseRetrievalPipeline(ABC, BaseModel):
         pass
 
     @abstractmethod
-    def from_default_index(*args, **kwargs):
+    def from_default_index(*args, **kwargs) -> BaseIndex:
         pass
 
     @abstractmethod
@@ -50,7 +52,7 @@ class BaseRetrievalPipeline(ABC, BaseModel):
             documents = Document(text="\n\n".join([doc.text for doc in documents]))
 
         # if docuemnts is a list of path strings
-        if all(isinstance(doc, str) for doc in documents):
+        if isinstance(documents, list) and all(isinstance(doc, str) for doc in documents):
             documents = SimpleDirectoryReader(input_files=documents).load_data()
             documents = Document(text="\n\n".join([doc.text for doc in documents]))
 
@@ -59,7 +61,7 @@ class BaseRetrievalPipeline(ABC, BaseModel):
             documents = [documents]
 
         # if documents is a list of documents
-        if all(isinstance(doc, Document) for doc in documents):
+        if isinstance(documents, list) and all(isinstance(doc, Document) for doc in documents):
             documents = Document(text="\n\n".join([doc.text for doc in documents]))
             return [documents]
         else:
@@ -187,7 +189,6 @@ class AutoMergingRetrievalPipeline(BaseRetrievalPipeline):
 
 
 class SentenceWindowRetrievalPipeline(BaseRetrievalPipeline):
-
     @staticmethod
     def from_default_query_engine(
         llm=OpenAI(model="gpt-3.5-turbo"),
@@ -293,8 +294,8 @@ class SentenceWindowRetrievalPipeline(BaseRetrievalPipeline):
         persist_dir = persist_dir or SENTENCE_WINDOW_INDEX_DEFAULT_DIR
 
         if not os.path.exists(persist_dir):
-            if verbose:
-                print(f"Creating sentence index to {persist_dir}")
+            # if verbose:
+            print(f"Creating sentence index to {persist_dir}")
 
             documents = SentenceWindowRetrievalPipeline.resolve_documents(documents)
 
@@ -305,13 +306,43 @@ class SentenceWindowRetrievalPipeline(BaseRetrievalPipeline):
             sentence_index.storage_context.persist(persist_dir=persist_dir)
 
         else:
-            if verbose:
-                print(f"Loading sentence index from {persist_dir}")
+            # if verbose:
+            print(f"Loading sentence index from {persist_dir}")
 
             sentence_index = load_index_from_storage(
                 StorageContext.from_defaults(persist_dir=persist_dir),
                 service_context=sentence_context,
             )
+
+        return sentence_index
+
+    @staticmethod
+    def from_updated_index(
+        sentence_index,
+        llm=None,
+        sentence_window_size=3,
+        verbose: bool = False,
+        *args,
+        **kwargs,
+    ):
+        window_metadata_key = kwargs.pop("window_metadata_key", "window")
+        original_text_metadata_key = kwargs.pop(
+            "original_text_metadata_key", "original_text"
+        )
+        embed_model = kwargs.pop("embed_model", "local:BAAI/bge-small-en-v1.5")
+
+        node_parser = SentenceWindowNodeParser.from_defaults(
+            window_size=sentence_window_size,
+            window_metadata_key=window_metadata_key,
+            original_text_metadata_key=original_text_metadata_key,
+        )
+
+        llm = llm or OpenAI(model="gpt-3.5-turbo")
+        sentence_index.storage_context = ServiceContext.from_defaults(
+            llm=llm,
+            embed_model=embed_model,
+            node_parser=node_parser,
+        )
 
         return sentence_index
 
@@ -327,18 +358,23 @@ class SentenceWindowRetrievalPipeline(BaseRetrievalPipeline):
         # sentence_index, similarity_top_k=6, rerank_top_n=2
     ) -> RetrieverQueryEngine:
         window_metadata_key = kwargs.pop("window_metadata_key", "window")
+        # print("---> Start: ",psutil.virtual_memory().percent)
 
         # takes value stored in metadata and replaces a node text with that value
         postproc = MetadataReplacementPostProcessor(
             target_metadata_key=window_metadata_key
         )
+        # print("---> After postproc: ",psutil.virtual_memory().percent)
 
         # re ranking
+        # when creating multiple instances of this class the re ranker takes the most memory
         rerank = SentenceTransformerRerank(top_n=rerank_top_n, model=rerank_model)
+        # print("---> After Reranker: ",psutil.virtual_memory().percent)
 
         sentence_window_engine = index.as_query_engine(
             similarity_top_k=similarity_top_k,  # we need more larger context to be fetched and feed to re rank
             node_postprocessors=[postproc, rerank],
         )
+        # print("---> After index.as_query_engine: ",psutil.virtual_memory().percent)
 
         return sentence_window_engine
